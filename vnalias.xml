@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension version="3.1" type="plugin" group="content" method="upgrade">
+	<name>Vietnamese Alias</name>
+	<author>Tran Meo</author>
+	<creationDate>November 2005</creationDate>
+	<copyright>Copyright (C) 2005 - 2018 Open Source Matters. All rights reserved.</copyright>
+	<license>GNU General Public License version 2 or later; see LICENSE.txt</license>
+	<authorEmail>admin@joomla.org</authorEmail>
+	<authorUrl>www.joomla.org</authorUrl>
+	<version>3.0.0</version>
+	<description>Vietnamese Alias</description>
+	<files>
+		<filename plugin="vnalias">vnalias.php</filename>
+	</files>
+</extension>

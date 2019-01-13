@@ -70,9 +70,12 @@ class OutputFilter extends BaseOutputFilter
 		// Remove any '-' from the string since they will be used as concatenaters
 		$str = str_replace('-', ' ', $string);
 
+		// start override core
 		require_once __DIR__ .'/VietAliasHelper.php';
 		
 		$str = \VietAliasHelper::vt_safe_vietnamese($str);
+
+		// end override core
 
 		// Transliterate on the language requested (fallback to current language if not specified)
 		$lang = $language == '' || $language == '*' ? \JFactory::getLanguage() : Language::getInstance($language);

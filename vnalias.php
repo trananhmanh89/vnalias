@@ -1,5 +1,5 @@
 <?php 
-#test
+
 defined('_JEXEC') or die('Restricted access');
 
 class PlgSystemVnalias extends JPlugin {

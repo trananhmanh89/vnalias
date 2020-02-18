@@ -1,4 +1,4 @@
-# vnalias: Tạo alias tiếng việt không dấu cho joomla
+# vnalias: Plugin tạo alias tiếng việt không dấu cho joomla
 Vietnamese Alias plugin for joomla
 
 #Tested with joomla 3.x

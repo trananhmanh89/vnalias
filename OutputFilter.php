@@ -8,52 +8,17 @@
 
 namespace Joomla\CMS\Filter;
 
-defined('JPATH_PLATFORM') or die;
+use \Joomla\CMS\Filter\_OutputFilter;
 
-use Joomla\Filter\OutputFilter as BaseOutputFilter;
-use Joomla\String\StringHelper;
-use Joomla\CMS\Language\Language;
+defined('JPATH_PLATFORM') or die;
 
 /**
  * OutputFilter
  *
  * @since  1.7.0
  */
-class OutputFilter extends BaseOutputFilter
+class OutputFilter extends _OutputFilter
 {
-	/**
-	 * This method processes a string and replaces all instances of & with &amp; in links only.
-	 *
-	 * @param   string  $input  String to process
-	 *
-	 * @return  string  Processed string
-	 *
-	 * @since   1.7.0
-	 */
-	public static function linkXHTMLSafe($input)
-	{
-		$regex = 'href="([^"]*(&(amp;){0})[^"]*)*?"';
-
-		return preg_replace_callback("#$regex#i", array('\\Joomla\\CMS\\Filter\\OutputFilter', '_ampReplaceCallback'), $input);
-	}
-
-	/**
-	 * This method processes a string and escapes it for use in JavaScript
-	 *
-	 * @param   string  $string  String to process
-	 *
-	 * @return  string  Processed text
-	 */
-	public static function stringJSSafe($string)
-	{
-		for ($i = 0, $l = strlen($string), $new_str = ''; $i < $l; $i++)
-		{
-			$new_str .= (ord(substr($string, $i, 1)) < 16 ? '\\x0' : '\\x') . dechex(ord(substr($string, $i, 1)));
-		}
-
-		return $new_str;
-	}
-
 	/**
 	 * This method processes a string and replaces all accented UTF-8 characters by unaccented
 	 * ASCII-7 "equivalents", whitespaces are replaced by hyphens and the string is lowercase.
@@ -67,7 +32,6 @@ class OutputFilter extends BaseOutputFilter
 	 */
 	public static function stringURLSafe($string, $language = '')
 	{
-		// Remove any '-' from the string since they will be used as concatenaters
 		$str = str_replace('-', ' ', $string);
 
 		// start override core
@@ -75,52 +39,6 @@ class OutputFilter extends BaseOutputFilter
 		
 		$str = \VietAliasHelper::vt_safe_vietnamese($str);
 
-		// end override core
-
-		// Transliterate on the language requested (fallback to current language if not specified)
-		$lang = $language == '' || $language == '*' ? \JFactory::getLanguage() : Language::getInstance($language);
-		$str = $lang->transliterate($str);
-
-		// Trim white spaces at beginning and end of alias and make lowercase
-		$str = trim(StringHelper::strtolower($str));
-
-		// Remove any duplicate whitespace, and ensure all characters are alphanumeric
-		$str = preg_replace('/(\s|[^A-Za-z0-9\-])+/', '-', $str);
-
-		// Trim dashes at beginning and end of alias
-		$str = trim($str, '-');
-
-		return $str;
-	}
-
-	/**
-	 * Callback method for replacing & with &amp; in a string
-	 *
-	 * @param   string  $m  String to process
-	 *
-	 * @return  string  Replaced string
-	 *
-	 * @since   3.5
-	 */
-	public static function ampReplaceCallback($m)
-	{
-		$rx = '&(?!amp;)';
-
-		return preg_replace('#' . $rx . '#', '&amp;', $m[0]);
-	}
-
-	/**
-	 * Callback method for replacing & with &amp; in a string
-	 *
-	 * @param   string  $m  String to process
-	 *
-	 * @return  string  Replaced string
-	 *
-	 * @since       1.7.0
-	 * @deprecated  4.0 Use OutputFilter::ampReplaceCallback() instead
-	 */
-	public static function _ampReplaceCallback($m)
-	{
-		return static::ampReplaceCallback($m);
+		return parent::stringURLSafe($str, $language);
 	}
 }
